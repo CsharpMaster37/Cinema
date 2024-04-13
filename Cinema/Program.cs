@@ -1,5 +1,11 @@
+using Cinema.Models;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
+string connString = builder.Configuration.GetConnectionString("DefaultConnection");
+builder.Services.AddDbContext<CinemaContext>(options =>
+                                    options.UseSqlServer(connString));// Add services to the container.
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
