@@ -1,0 +1,73 @@
+﻿<style>
+    .film-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-start;
+        margin-bottom: 20px;
+    }
+
+    .film-item {
+        width: 45%;
+        margin-bottom: 20px;
+        line-height: 1.4;
+        border: 1px solid #ccc;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .film-name {
+        font-size: 24px;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+
+    .film-details {
+        flex-grow: 1;
+    }
+
+    .film-info p {
+        margin-bottom: 10px;
+    }
+
+    .btn-group {
+        align-self: flex-end;
+    }
+</style>
+
+
+<h1>Фильмы</h1>
+
+<p>
+    <a class="btn btn-primary" asp-action="Create">Добавить новый</a>
+</p>
+
+<div class="film-container">
+    @foreach (var item in Model)
+    {
+        <div class="film-item">
+            @if (!string.IsNullOrEmpty(item.ImageUrl))
+            {
+                <img src="@item.ImageUrl" alt="@item.Name" style="max-height: 500px; max-width: 80%;" />
+            }
+            else
+            {
+                <div style="width: 80%; height: 500px; border: 1px solid #ccc;"></div>
+            }
+            <div class="film-details">
+                <p class="film-name">@item.Name</p>
+                <div class="film-info">
+                    <p><strong>Страна:</strong> @item.Country</p>
+                    <p><strong>Цена:</strong> @item.Price</p>
+                    <p><strong>Год:</strong> @item.Year</p>
+                    <p><strong>Жанр:</strong> @item.Genre.Name</p>
+                </div>
+                <div class="btn-group">
+                    <a class="btn btn-info" asp-action="Edit" asp-route-id="@item.Id">Изменить</a>
+                    <a class="btn btn-success" asp-action="Details" asp-route-id="@item.Id">Детали</a>
+                    <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.Id">Удалить</a>
+                </div>
+            </div>
+        </div>
+    }
+</div>
