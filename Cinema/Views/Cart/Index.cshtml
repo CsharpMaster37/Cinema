@@ -1,0 +1,47 @@
+﻿@model IEnumerable<Cinema.Models.CartItem>
+@using System.Web;
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.SelectFilm.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SelectFilm.Year)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SelectFilm.Price)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            var rowId = "itemRow" + item.SelectFilm.Id;
+            <tr id=@rowId>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SelectFilm.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SelectFilm.Year)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SelectFilm.Price)
+                </td>
+                <td>
+                    <a asp-action="Delete" asp-route-id="@item.Id">@HttpUtility.HtmlDecode("&#10060;")</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<br />
+<h3> Общая стоимость товаров:<span id="totalCost">@ViewBag.Sum</span> руб.</h3>
+<a asp-action="Create" asp-controller="Order" class="btn btn-info">Оформить заказ</a>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>

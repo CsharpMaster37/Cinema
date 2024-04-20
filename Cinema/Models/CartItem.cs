@@ -11,7 +11,7 @@ namespace Cinema.Models
         [HiddenInput(DisplayValue = false)]
         public int Id { get; set; }
         [HiddenInput(DisplayValue = false)]
-        public string CartId { get; set; }
+        public string UserId { get; set; }
         [HiddenInput(DisplayValue = false)]
         public int FilmId { get; set; }
         public Film SelectFilm { get; set; }

@@ -86,6 +86,17 @@ namespace Cinema.Controllers
         {
             ViewBag.UserManager = _userManager;
             var films = await _db.Films.Include(f => f.Genre).ToListAsync();
+            List<int> cart = new List<int>();
+            if (User.Identity.IsAuthenticated)
+            {
+                var user = await _userManager.GetUserAsync(User);
+                var cartDB = await _db.Cart.Where(c => c.UserId == user.Id).ToListAsync();
+                foreach (var item in cartDB)
+                {
+                    cart.Add(item.FilmId);
+                }
+            }
+            ViewBag.Cart = cart;
             return View(films);
         }
 
@@ -123,5 +134,6 @@ namespace Cinema.Controllers
             _db.SaveChanges();
             return RedirectToAction("Index");
         }
+
     }
 }
