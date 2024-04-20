@@ -1,6 +1,7 @@
 using Cinema.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,14 +26,20 @@ builder.Services.Configure<IdentityOptions>(options =>
     // Устанавливаем требование к наличию прописной буквы ('A'-'Z') в пароле на false
     options.Password.RequireUppercase = false;
 });
-builder.Services.AddAuthorization(options =>
-{
-    options.AddPolicy("RequireAdministratorRole", policy => policy.RequireRole("Админ"));
-});
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
+//using (var scope = app.Services.CreateScope())
+//{
+//    var services = scope.ServiceProvider;
+//    var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+//    if (!await roleManager.RoleExistsAsync("Admin"))
+//    {
+//        var role = new IdentityRole("Admin");
+//        await roleManager.CreateAsync(role);
+//    }
+//}
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

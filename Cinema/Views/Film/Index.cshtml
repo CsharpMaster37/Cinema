@@ -1,19 +1,22 @@
-﻿<style>
+﻿@using Microsoft.AspNetCore.Identity
+@{var user = await ViewBag.UserManager.GetUserAsync(User);}
+
+<style>
     .film-container {
         display: flex;
         flex-wrap: wrap;
-        justify-content: flex-start;
+        justify-content: space-between;
         margin-bottom: 20px;
     }
 
     .film-item {
-        width: 45%;
+        width: calc(50% - 10px);
+        min-width: 300px; /* Минимальная ширина элемента */
         margin-bottom: 20px;
         line-height: 1.4;
         border: 1px solid #ccc;
         padding: 20px;
-        display: flex;
-        flex-direction: column;
+        box-sizing: border-box;
     }
 
     .film-name {
@@ -33,27 +36,40 @@
     .btn-group {
         align-self: flex-end;
     }
+
+    .img-container {
+        width: 100%;
+        max-width: 368px;
+        height: auto;
+        border: 1px solid #ccc;
+    }
+
 </style>
 
 
 <h1>Фильмы</h1>
 
-<p>
-    <a class="btn btn-primary" asp-action="Create">Добавить новый</a>
-</p>
+@if (User.Identity.IsAuthenticated && await ViewBag.UserManager.IsInRoleAsync(user, "Admin"))
+{
+    <p>
+        <a class="btn btn-primary" asp-action="Create">Добавить новый</a>
+    </p>
+}
 
 <div class="film-container">
     @foreach (var item in Model)
     {
         <div class="film-item">
-            @if (!string.IsNullOrEmpty(item.ImageUrl))
-            {
-                <img src="@item.ImageUrl" alt="@item.Name" style="max-height: 500px; max-width: 80%;" />
-            }
-            else
-            {
-                <div style="width: 80%; height: 500px; border: 1px solid #ccc;"></div>
-            }
+            <div class="img-container">
+                @if (!string.IsNullOrEmpty(item.ImageUrl))
+                {
+                    <img src="@Url.Content("~/images/")@item.ImageUrl" alt="@item.Name" class="card-img-top"/>
+                }
+                else
+                {
+                    <img src="@Url.Content("~/images/")null_image.jpg" alt="@item.Name" class="card-img-top" />
+                }
+            </div>
             <div class="film-details">
                 <p class="film-name">@item.Name</p>
                 <div class="film-info">
@@ -62,11 +78,32 @@
                     <p><strong>Год:</strong> @item.Year</p>
                     <p><strong>Жанр:</strong> @item.Genre.Name</p>
                 </div>
-                <div class="btn-group">
-                    <a class="btn btn-info" asp-action="Edit" asp-route-id="@item.Id">Изменить</a>
-                    <a class="btn btn-success" asp-action="Details" asp-route-id="@item.Id">Детали</a>
-                    <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.Id">Удалить</a>
-                </div>
+                @if (User.Identity.IsAuthenticated && await ViewBag.UserManager.IsInRoleAsync(user, "Admin"))
+                {
+                    <div class="btn-group">
+                        <a class="btn btn-info" asp-action="Edit" asp-route-id="@item.Id">Изменить</a>
+                        <a class="btn btn-success" asp-action="Details" asp-route-id="@item.Id">Детали</a>
+                        <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.Id">Удалить</a>
+                    </div>
+                }
+                else if (User.Identity.IsAuthenticated)
+                {
+                    <div class="card-footer">
+                        <a asp-action="Add" asp-controller="Cart" asp-route-id="@item.Id"
+                           class="btn btn-info">В корзину</a>
+                        <a asp-action="Review" asp-route-id="@item.Id"
+                           class="btn btn-info">Отзывы</a>
+                    </div>
+                }
+                else
+                {
+                    <div class="card-footer">
+                        <a asp-area="Identity" asp-controller="User" asp-action="Login"
+                           class="btn btn-info">В корзину</a>
+                        <a asp-action="Review" asp-route-id="@item.Id"
+                           class="btn btn-info">Отзывы</a>
+                    </div>
+                }
             </div>
         </div>
     }

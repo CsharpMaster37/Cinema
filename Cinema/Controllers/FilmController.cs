@@ -1,4 +1,5 @@
 ﻿using Cinema.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -12,12 +13,14 @@ namespace Cinema.Controllers
     {
         CinemaContext _db;
         IWebHostEnvironment _environment;
-        const int ImageWidth = 300;
+        private readonly UserManager<User> _userManager;
+        const int ImageWidth = 368;
         const int ImageHeight = 500;
-        public FilmController(CinemaContext db, IWebHostEnvironment hostEnvironment)
+        public FilmController(CinemaContext db, IWebHostEnvironment hostEnvironment, UserManager<User> userManager)
         {
             _db = db;
             _environment = hostEnvironment;
+            _userManager = userManager;
             //var horrorGenre = new Genre() { Name = "Ужасы" };
             //var sciFiGenre = new Genre() { Name = "Фантастика" };
 
@@ -79,9 +82,10 @@ namespace Cinema.Controllers
             //db.Films.AddRange([film1, film2,film3, film4, film5, film6]);
             //db.SaveChanges();
         }
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var films = _db.Films.Include(f => f.Genre).ToList();
+            ViewBag.UserManager = _userManager;
+            var films = await _db.Films.Include(f => f.Genre).ToListAsync();
             return View(films);
         }
 
