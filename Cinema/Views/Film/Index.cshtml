@@ -55,7 +55,16 @@
         <a class="btn btn-primary" asp-action="Create">Добавить новый</a>
     </p>
 }
-
+<div>
+    <form asp-action="Search" method="get" class="form-inline">
+        <div class="form-group">
+            <label for="searchInput">Поиск:</label>
+            <input type="text" id="searchInput" name="searchString" class="form-control" value="@ViewBag.SearchString" />
+        </div>
+        <button type="submit" class="btn btn-info">Искать</button>
+        <a asp-action="Index" class="btn btn-info">Сбросить</a>
+    </form>
+</div>
 <div class="film-container">
     @foreach (var item in Model)
     {
@@ -80,25 +89,42 @@
                 </div>
                 @if (User.Identity.IsAuthenticated && await ViewBag.UserManager.IsInRoleAsync(user, "Admin"))
                 {
+                    bool inCart = ViewBag.Cart.Contains(item.Id);
                     <div class="btn-group">
+                        @if (!inCart)
+                        {
+                            <a asp-action="Add" asp-controller="Cart" asp-route-id="@item.Id"
+                               class="btn btn-info">В корзину</a>
+                        }
+                        else
+                        {
+                            <a asp-controller="Cart" asp-action="Index"
+                               class="btn btn-info">Уже в корзине</a>
+                        }
+                        <a asp-action="Review" asp-route-id="@item.Id"
+                           class="btn btn-info">Отзывы</a>
                         <a class="btn btn-info" asp-action="Edit" asp-route-id="@item.Id">Изменить</a>
-                        <a class="btn btn-success" asp-action="Details" asp-route-id="@item.Id">Детали</a>
                         <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.Id">Удалить</a>
                     </div>
                 }
                 else if (User.Identity.IsAuthenticated)
                 {
                     bool inCart = ViewBag.Cart.Contains(item.Id);
+                    bool purchFilm = ViewBag.PurchasedFilms.Contains(item.Id);
                     <div class="card-footer">
-                        @if (!inCart)
+                        @if (purchFilm)
+                        {
+                            <a class="btn btn-info" style="background-color: green; border:none">Куплено</a>
+                        }
+                        else if (!inCart)
                         {
                             <a asp-action="Add" asp-controller="Cart" asp-route-id="@item.Id"
-                            class="btn btn-info">В корзину</a>
+                               class="btn btn-info">В корзину</a>
                         }
-                        else
-                        {
-                            <a asp-controller="Cart" asp-action="Index"
-                               class="btn btn-info">Уже в корзине</a>
+                        else{
+                            <a asp-controller="Cart" asp-action="Index" class="btn btn-info">
+                                &#10003; Уже в корзине
+                            </a>
                         }
                         <a asp-action="Review" asp-route-id="@item.Id"
                            class="btn btn-info">Отзывы</a>

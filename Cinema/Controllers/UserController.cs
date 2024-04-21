@@ -66,6 +66,8 @@ namespace Cinema.Controllers
         [HttpPost]
         public async Task<IActionResult> Logout()
         {
+            if (!User.Identity.IsAuthenticated)
+                return RedirectToAction("Login", "User");
             await _signInManager.SignOutAsync();
             return RedirectToAction("Index", "Film");
         }
@@ -73,6 +75,8 @@ namespace Cinema.Controllers
         [HttpGet]
         public async Task<IActionResult> Profile()
         {
+            if (!User.Identity.IsAuthenticated)
+                return RedirectToAction("Login", "User");
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {

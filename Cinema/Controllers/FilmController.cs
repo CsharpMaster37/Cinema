@@ -87,6 +87,7 @@ namespace Cinema.Controllers
             ViewBag.UserManager = _userManager;
             var films = await _db.Films.Include(f => f.Genre).ToListAsync();
             List<int> cart = new List<int>();
+            List<int> PurchasedFilms = new List<int>();
             if (User.Identity.IsAuthenticated)
             {
                 var user = await _userManager.GetUserAsync(User);
@@ -95,8 +96,18 @@ namespace Cinema.Controllers
                 {
                     cart.Add(item.FilmId);
                 }
+                List<Order> orders = _db.Orders.Where(o => o.Status == "Выполнен" && o.UserId == user.Id).ToList();
+                foreach (var order in orders)
+                {
+                    var items = _db.Items.Where(i => i.OrderId == order.Id).ToList();
+                    foreach (var item in items)
+                    {
+                        PurchasedFilms.Add(item.FilmId);
+                    }
+                }
             }
             ViewBag.Cart = cart;
+            ViewBag.PurchasedFilms = PurchasedFilms;
             return View(films);
         }
 
@@ -134,6 +145,41 @@ namespace Cinema.Controllers
             _db.SaveChanges();
             return RedirectToAction("Index");
         }
+        public async Task<IActionResult> Search(string searchString)
+        {
+            ViewBag.UserManager = _userManager;
+            ViewBag.SearchString = searchString;
+            var films = _db.Films.Include(f => f.Genre).Where(f => f.Name.Contains(searchString)).ToList();
 
+            List<int> cart = new List<int>();
+            List<int> PurchasedFilms = new List<int>();
+
+            if (User.Identity.IsAuthenticated)
+            {
+                var user = await _userManager.GetUserAsync(User);
+
+                var cartDB = _db.Cart.Where(c => c.UserId == user.Id).ToList();
+
+                foreach (var item in cartDB)
+                {
+                    cart.Add(item.FilmId);
+                }
+                List<Order> orders = _db.Orders.Where(o => o.Status == "Выполнен" && o.UserId == user.Id).ToList();
+                foreach (var order in orders)
+                {
+                    var items = _db.Items
+                        .Where(i => i.OrderId == order.Id)
+                        .ToList();
+
+                    foreach (var item in items)
+                    {
+                        PurchasedFilms.Add(item.FilmId);
+                    }
+                }
+            }
+            ViewBag.Cart = cart;
+            ViewBag.PurchasedFilms = PurchasedFilms;
+            return View("Index", films);
+        }
     }
 }

@@ -16,7 +16,12 @@ namespace Cinema.Models
         [Display(Name = "Общая стоимость")]
         public int TotalPrice { get; set; }
 
+        [HiddenInput(DisplayValue = false)]
+        public string UserId { get; set; }
+        public string Status {  get; set; }
+
         public DateTime Date { get; set; } // дата покупки
-        public IEnumerable<OrderItem> Items { get; set; }       
+
+        public IEnumerable<OrderItem> Items { get; set; }      
     }
 }

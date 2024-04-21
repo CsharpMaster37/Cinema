@@ -16,8 +16,10 @@ namespace Cinema.Controllers
         }
         public async Task<IActionResult> Index()
         {
+            if(!User.Identity.IsAuthenticated)
+                return RedirectToAction("Login","User");
             var user = await _userManager.GetUserAsync(User);
-            var cartItems = _db.Cart.Include(c => c.SelectFilm).Where(c => c.UserId == user.Id).ToList();
+            var cartItems = _db.Cart.Include(c => c.SelectFilm).Where(c => c.UserId == user.Id).Include(c=>c.SelectFilm.Genre).ToList();
             int sum = 0;
             foreach (var item in cartItems)
             {

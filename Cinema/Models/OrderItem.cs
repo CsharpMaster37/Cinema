@@ -11,7 +11,6 @@ namespace Cinema.Models
         [HiddenInput(DisplayValue = false)]
         public int OrderId { get; set; }
 
-        [ForeignKey("FilmId")]
         [HiddenInput(DisplayValue = false)]
         public int FilmId { get; set; }
 

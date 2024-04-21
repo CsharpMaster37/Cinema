@@ -12,7 +12,13 @@
                 @Html.DisplayNameFor(model => model.SelectFilm.Name)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.SelectFilm.Country)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.SelectFilm.Year)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SelectFilm.Genre.Name)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.SelectFilm.Price)
@@ -29,7 +35,13 @@
                     @Html.DisplayFor(modelItem => item.SelectFilm.Name)
                 </td>
                 <td>
+                    @Html.DisplayFor(modelItem => item.SelectFilm.Country)
+                </td>
+                <td>
                     @Html.DisplayFor(modelItem => item.SelectFilm.Year)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SelectFilm.Genre.Name)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.SelectFilm.Price)
