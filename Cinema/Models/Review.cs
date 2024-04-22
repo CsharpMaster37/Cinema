@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Cinema.Models
 {
+    [Table("Reviews")]
     public class Review
     {
         [Key]
@@ -22,13 +23,11 @@ namespace Cinema.Models
         [Display(Name = "Дата отзыва")]
         public DateTime DatePosted { get; set; }
 
-        [ForeignKey("UserId")]
         [HiddenInput(DisplayValue = false)]
         public string UserId { get; set; }
 
         [Display(Name = "Пользователь")]
-        public User User { get; set; }
-        [ForeignKey("FilmId")]
+        public string UserName { get; set; }
         [HiddenInput(DisplayValue = false)]
         public int FilmId { get; set; }
         [Display(Name = "Фильм")]

@@ -40,7 +40,7 @@ namespace Cinema.Controllers
                 FilmId = id
             };
             _db.Cart.Add(newCartItem);
-            await _db.SaveChangesAsync();
+            _db.SaveChanges();
             return RedirectToAction("Index", "Film");
         }
         public IActionResult Delete(int id)

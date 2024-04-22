@@ -83,10 +83,8 @@
                     <p><strong>Жанр:</strong> @item.Genre.Name</p>
                 </div>
                 <div class="card-footer">
-                    <a asp-action="" asp-controller="" asp-route-id="@item.Id"
-                       class="btn btn-info">Смотреть</a>
-                    <a asp-action="Review" asp-route-id="@item.Id"
-                       class="btn btn-info">Отзывы</a>
+                    <a asp-action="" asp-controller="" asp-route-id="@item.Id" class="btn btn-info">Смотреть</a>
+                    <a class="btn btn-info" asp-action="Reviews" asp-controller="Review" asp-route-id="@item.Id">Отзывы</a>
                 </div>
             </div>
         </div>

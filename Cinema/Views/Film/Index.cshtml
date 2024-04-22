@@ -83,9 +83,9 @@
                 <p class="film-name">@item.Name</p>
                 <div class="film-info">
                     <p><strong>Страна:</strong> @item.Country</p>
-                    <p><strong>Цена:</strong> @item.Price</p>
                     <p><strong>Год:</strong> @item.Year</p>
                     <p><strong>Жанр:</strong> @item.Genre.Name</p>
+                    <p><strong>Цена:</strong> @item.Price</p>
                 </div>
                 @if (User.Identity.IsAuthenticated && await ViewBag.UserManager.IsInRoleAsync(user, "Admin"))
                 {
@@ -101,8 +101,7 @@
                             <a asp-controller="Cart" asp-action="Index"
                                class="btn btn-info">Уже в корзине</a>
                         }
-                        <a asp-action="Review" asp-route-id="@item.Id"
-                           class="btn btn-info">Отзывы</a>
+                        <a class="btn btn-info" asp-action="Reviews" asp-controller="Review" asp-route-id="@item.Id">Отзывы</a>
                         <a class="btn btn-info" asp-action="Edit" asp-route-id="@item.Id">Изменить</a>
                         <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.Id">Удалить</a>
                     </div>
@@ -126,17 +125,14 @@
                                 &#10003; Уже в корзине
                             </a>
                         }
-                        <a asp-action="Review" asp-route-id="@item.Id"
-                           class="btn btn-info">Отзывы</a>
+                        <a class="btn btn-info" asp-action="Reviews" asp-controller="Review" asp-route-id="@item.Id">Отзывы</a>
                     </div>
                 }
                 else
                 {
                     <div class="card-footer">
-                        <a asp-area="Identity" asp-controller="User" asp-action="Login"
-                           class="btn btn-info">В корзину</a>
-                        <a asp-action="Review" asp-route-id="@item.Id"
-                           class="btn btn-info">Отзывы</a>
+                        <a asp-area="Identity" asp-controller="User" asp-action="Login" class="btn btn-info">В корзину</a>
+                        <a class="btn btn-info" asp-action="Reviews" asp-controller="Review" asp-route-id="@item.Id">Отзывы</a>
                     </div>
                 }
             </div>

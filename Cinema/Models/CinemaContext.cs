@@ -10,6 +10,7 @@ namespace Cinema.Models
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderItem> Items { get; set; }
         public DbSet<CartItem> Cart { get; set; }
+        public DbSet<Review> Reviews { get; set; }
         public CinemaContext(DbContextOptions<CinemaContext> options)
              : base(options)
         {
