@@ -42,24 +42,28 @@
     <h2>Профиль</h2>
     <dl>
         <div class="element">
-            <dt>User ID:</dt>
+            <dt>ID:</dt>
             <dd>@Model.UserId</dd>
         </div>
         <div class="element">
-            <dt>Username:</dt>
+            <dt>Имя пользователя:</dt>
             <dd>@Model.Username</dd>
         </div>
         <div class="element">
-            <dt>First Name:</dt>
+            <dt>Имя:</dt>
             <dd>@(Model.FirstName != null ? Model.FirstName : "N/A")</dd>
         </div>
         <div class="element">
-            <dt>Last Name:</dt>
+            <dt>Фамилия:</dt>
             <dd>@(Model.LastName != null ? Model.LastName : "N/A")</dd>
         </div>
         <div class="element">
-            <dt>Date of Birth:</dt>
+            <dt>Дата рождения:</dt>
             <dd>@(Model.DateOfBirth.HasValue ? Model.DateOfBirth.Value.ToShortDateString() : "N/A")</dd>
+        </div>
+        <div class="element">
+            <dt>Баланс:</dt>
+            <dd>@Model.Balance</dd>
         </div>
         <div class="element">
             <dt>Is Admin:</dt>

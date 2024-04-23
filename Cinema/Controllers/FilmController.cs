@@ -91,6 +91,7 @@ namespace Cinema.Controllers
             if (User.Identity.IsAuthenticated)
             {
                 var user = await _userManager.GetUserAsync(User);
+                ViewBag.Balance = user.Balance;
                 var cartDB = await _db.Cart.Where(c => c.UserId == user.Id).ToListAsync();
                 foreach (var item in cartDB)
                 {

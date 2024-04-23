@@ -37,10 +37,11 @@
                         {
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    Welcome, @User.Identity.Name!
+                                    Добро пожаловать, @User.Identity.Name!
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                                     <a class="dropdown-item btn btn-link" asp-area="Identity" asp-controller="User" asp-action="Profile">Профиль</a>
+                                    <a class="dropdown-item btn btn-link" asp-area="Identity" asp-controller="User" asp-action="Balance">Баланс:  @ViewBag.Balance</a>
                                     <form id="logoutForm" asp-area="Identity" asp-controller="User" asp-action="Logout" method="post" class="d-inline">
                                         <button type="submit" class="dropdown-item btn btn-link">Выйти</button>
                                     </form>

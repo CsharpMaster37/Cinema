@@ -12,9 +12,11 @@ namespace Cinema.Models
         public int Id { get; set; }
 
         [Required(ErrorMessage = "Пожалуйста, введите текст отзыва")]
+        [StringLength(200, MinimumLength = 1, ErrorMessage = "Длина строки должна быть от 1 до 200 символов")]
         [Display(Name = "Текст отзыва")]
         public string Text {get; set; }
 
+        [Required(ErrorMessage = "Пожалуйста, поставьте свою оценку!")]
         [Range(1, 5, ErrorMessage = "Оценка должна быть от 1 до 5")]
         [Display(Name = "Оценка")]
         public int Rating { get; set; }

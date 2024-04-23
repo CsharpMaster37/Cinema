@@ -46,13 +46,22 @@ namespace Cinema.Controllers
         {
             if (review == null)
                 return NotFound();
-            review.DatePosted = DateTime.Now;
             User user = await _userManager.GetUserAsync(User);
+            review.DatePosted = DateTime.Now;
             review.UserId = user.Id;
             review.UserName = user.UserName;
-            _db.Reviews.Add(review);
+            var existingReview = _db.Reviews.FirstOrDefault(r => r.UserId == review.UserId);
+            if (existingReview != null)
+            {
+                existingReview.DatePosted = review.DatePosted;
+                existingReview.Text = review.Text;
+                existingReview.Rating = review.Rating;
+                _db.Entry(existingReview).State = EntityState.Modified;
+            }
+            else
+                _db.Reviews.Add(review);
             _db.SaveChanges();
-            return RedirectToAction("Reviews");
+            return RedirectToAction("Reviews", new {id = review.FilmId });
         }
 
 

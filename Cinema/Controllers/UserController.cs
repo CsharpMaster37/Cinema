@@ -25,21 +25,21 @@ namespace Cinema.Controllers
         [HttpPost]
         public async Task<IActionResult> Register(RegisterUser model)
         {
-            var user = new User { UserName = model.Username, PasswordHash = model.Password, FirstName = model.FirstName, LastName = model.LastName, DateofBirth = model.DateofBirth };
-            //user.IsAdmin = true;
-            var result = await _userManager.CreateAsync(user, model.Password);
-            if (user.IsAdmin)
-                await _userManager.AddToRoleAsync(user, "Admin");
-            if (result.Succeeded)
+            if (ModelState.IsValid)
             {
-                await _signInManager.SignInAsync(user, isPersistent: false);
-                return RedirectToAction("Index", "Film");
-            }
-            else
-            {
-                foreach (var error in result.Errors)
+                var user = new User { UserName = model.Username, PasswordHash = model.Password, FirstName = model.FirstName, LastName = model.LastName, DateofBirth = model.DateofBirth };
+                var result = await _userManager.CreateAsync(user, model.Password);
+                if (result.Succeeded)
                 {
-                    ModelState.AddModelError(string.Empty, error.Description);
+                    await _signInManager.SignInAsync(user, isPersistent: false);
+                    return RedirectToAction("Index", "Film");
+                }
+                else
+                {
+                    foreach (var error in result.Errors)
+                    {
+                        ModelState.AddModelError(string.Empty, error.Description);
+                    }
                 }
             }
             return View(model);
@@ -54,12 +54,16 @@ namespace Cinema.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(LoginUser model)
         {
-            var result = await _signInManager.PasswordSignInAsync(model.Username, model.Password, isPersistent: false, lockoutOnFailure: false);
-            if (result.Succeeded)
+            if (ModelState.IsValid)
             {
-                return RedirectToAction("Index", "Film");
+                var result = await _signInManager.PasswordSignInAsync(model.Username, model.Password, isPersistent: false, lockoutOnFailure: false);
+                if (result.Succeeded)
+                {
+                    return RedirectToAction("Index", "Film");
+                }
+                ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                return View(model);
             }
-            ModelState.AddModelError(string.Empty, "Invalid login attempt.");
             return View(model);
         }
 

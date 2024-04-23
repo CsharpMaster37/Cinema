@@ -126,7 +126,7 @@
         {
             <h2>Напишите свой отзыв</h2>
             <br />
-            <form asp-action="Add" method="post">
+            <form asp-action="Add" method="post" onsubmit="return validateForm()">
                 <div class="form-group">
                     <label asp-for="Text">Текст отзыва</label>
                     <textarea asp-for="Text" class="form-control"></textarea>
@@ -134,8 +134,8 @@
                 </div>
                 <div class="form-group">
                     <label>Оценка</label>
-                    <input type="hidden" id="ratingValue" name="Rating" />
-                    <span asp-for="Rating" class="rating" data-value="0"></span>
+                    <input asp-for="Rating" type="hidden" id="ratingValue" name="Rating" />
+                    <span class="rating" data-value="0"></span>
                     <span asp-validation-for="Rating" class="text-danger"></span>
                 </div>
                 <input type="hidden" name="FilmId" value="@ViewBag.Film.Id" />

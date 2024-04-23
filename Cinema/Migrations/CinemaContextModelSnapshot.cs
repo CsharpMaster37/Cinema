@@ -168,7 +168,8 @@ namespace Cinema.Migrations
 
                     b.Property<string>("Text")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<string>("UserId")
                         .IsRequired()
@@ -191,6 +192,9 @@ namespace Cinema.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("AccessFailedCount")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Balance")
                         .HasColumnType("int");
 
                     b.Property<string>("ConcurrencyStamp")
