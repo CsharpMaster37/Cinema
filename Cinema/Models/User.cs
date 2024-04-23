@@ -7,7 +7,6 @@ namespace Cinema.Models
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
         public DateTime? DateofBirth { get; set; }
-        public int Balance { get; set; }
         public bool IsAdmin { get; set; }
     }
 }
