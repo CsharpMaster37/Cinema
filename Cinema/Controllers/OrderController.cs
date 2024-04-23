@@ -81,7 +81,6 @@ namespace Cinema.Controllers
         [Authorize]
         public IActionResult Success()
         {
-            ViewBag.Msg = "Ваш заказ подтвержден и скоро к вам приедет";
             return View();
         }
         [Authorize]

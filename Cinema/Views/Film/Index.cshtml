@@ -1,5 +1,4 @@
 ﻿@using Microsoft.AspNetCore.Identity
-@{var user = await ViewBag.UserManager.GetUserAsync(User);}
 
 <style>
     .film-container {
@@ -49,7 +48,7 @@
 
 <h1>Фильмы</h1>
 
-@if (User.Identity.IsAuthenticated && await ViewBag.UserManager.IsInRoleAsync(user, "Admin"))
+@if (User.IsInRole("Admin"))
 {
     <p>
         <a class="btn btn-primary" asp-action="Create">Добавить новый</a>
@@ -87,7 +86,7 @@
                     <p><strong>Жанр:</strong> @item.Genre.Name</p>
                     <p><strong>Цена:</strong> @item.Price</p>
                 </div>
-                @if (User.Identity.IsAuthenticated && await ViewBag.UserManager.IsInRoleAsync(user, "Admin"))
+                @if (User.IsInRole("Admin"))
                 {
                     bool inCart = ViewBag.Cart.Contains(item.Id);
                     <div class="btn-group">
