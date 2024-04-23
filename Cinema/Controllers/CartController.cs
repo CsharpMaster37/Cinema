@@ -1,4 +1,5 @@
 ﻿using Cinema.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -14,6 +15,7 @@ namespace Cinema.Controllers
             _db = context;
             _userManager = userManager;
         }
+        [Authorize]
         public async Task<IActionResult> Index()
         {
             if(!User.Identity.IsAuthenticated)
@@ -30,6 +32,7 @@ namespace Cinema.Controllers
             ViewBag.Sum = sum;
             return View(cartItems);
         }
+        [Authorize]
         public async Task<IActionResult> Add(int id)
         {
             var user = await _userManager.GetUserAsync(User);
@@ -43,6 +46,7 @@ namespace Cinema.Controllers
             _db.SaveChanges();
             return RedirectToAction("Index", "Film");
         }
+        [Authorize]
         public IActionResult Delete(int id)
         {
             var cartItem = _db.Cart.Find(id);

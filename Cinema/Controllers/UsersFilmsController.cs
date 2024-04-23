@@ -1,4 +1,5 @@
 ﻿using Cinema.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -14,10 +15,9 @@ namespace Cinema.Controllers
             _db = context;
             _userManager = userManager;
         }
+        [Authorize]
         public async Task<IActionResult> Index()
         {
-            if (!User.Identity.IsAuthenticated)
-                return RedirectToAction("Login", "User");
             User user = await _userManager.GetUserAsync(User);
             List<Order> orders = _db.Orders.Where(o => o.Status == "Выполнен" && o.UserId == user.Id).ToList();
             List<Film> films = new List<Film>();
@@ -31,10 +31,9 @@ namespace Cinema.Controllers
             }
             return View(films);
         }
+        [Authorize]
         public async Task<IActionResult> Search(string searchString)
         {
-            if (!User.Identity.IsAuthenticated)
-                return RedirectToAction("Login", "User");
             User user = await _userManager.GetUserAsync(User);
             List<Order> orders = _db.Orders.Where(o => o.Status == "Выполнен" && o.UserId == user.Id).ToList();
             List<Film> films = new List<Film>();

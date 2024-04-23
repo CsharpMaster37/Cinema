@@ -1,4 +1,5 @@
 ﻿using Cinema.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
@@ -68,15 +69,15 @@ namespace Cinema.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> Logout()
         {
-            if (!User.Identity.IsAuthenticated)
-                return RedirectToAction("Login", "User");
             await _signInManager.SignOutAsync();
             return RedirectToAction("Index", "Film");
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> Profile()
         {
             if (!User.Identity.IsAuthenticated)

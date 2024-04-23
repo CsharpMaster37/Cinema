@@ -1,4 +1,5 @@
 ﻿using Cinema.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -19,10 +20,9 @@ namespace Cinema.Controllers
             return View();
         }
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> Create()
         {
-            if (!User.Identity.IsAuthenticated)
-                return RedirectToAction("Login", "User");
             User user = await _userManager.GetUserAsync(User);
             Order order = await _db.Orders.FirstOrDefaultAsync(c => c.UserId == user.Id);
             if (order != null && order.Status != "Выполнен")
@@ -56,6 +56,8 @@ namespace Cinema.Controllers
                 Sum += film.Price;
                 _db.Entry(film).State = EntityState.Modified;
             }
+            if (orderItems.Count == 0)
+                return RedirectToAction("Index", "Cart");
             order.Items = orderItems;
             order.TotalPrice = Sum;
             order.Status = "Создан";
@@ -66,6 +68,7 @@ namespace Cinema.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public IActionResult Create(Order order)
         {
             order.Status = "Выполнен";
@@ -75,12 +78,13 @@ namespace Cinema.Controllers
             _db.SaveChanges();
             return RedirectToAction("Success");
         }
+        [Authorize]
         public IActionResult Success()
         {
             ViewBag.Msg = "Ваш заказ подтвержден и скоро к вам приедет";
             return View();
         }
-
+        [Authorize]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)

@@ -1,4 +1,5 @@
 ﻿using Cinema.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -112,6 +113,7 @@ namespace Cinema.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public IActionResult Edit(int? id)
         {
             if (id == null)
@@ -123,6 +125,7 @@ namespace Cinema.Controllers
             return View(film);
         }
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public IActionResult Edit(Film film, IFormFile upload)
         {
             if (upload != null)
@@ -180,6 +183,58 @@ namespace Cinema.Controllers
             ViewBag.Cart = cart;
             ViewBag.PurchasedFilms = PurchasedFilms;
             return View("Index", films);
+        }
+
+        [HttpGet]
+        [Authorize(Roles = "Admin")]
+        public IActionResult Create()
+        {
+            ViewBag.Genre = new SelectList(_db.Genres, "Id", "Name");
+            return View();
+        }
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        public IActionResult Create(Film film, IFormFile upload)
+        {
+            if (upload != null)
+            {
+                string fileName = Path.GetFileName(upload.FileName);
+                var extFile = fileName.Substring(fileName.LastIndexOf("."));
+                if (extFile.Contains("png") || extFile.Contains("bmp") || extFile.Contains("jpg") || extFile.Contains("jpeg"))
+                {
+                    var image = Image.Load(upload.OpenReadStream());
+                    image.Mutate(x => x.Resize(ImageWidth, ImageHeight));
+                    string path = "\\wwwroot\\images\\" + fileName;
+                    var hostPath = _environment.ContentRootPath + path;
+                    image.Save(hostPath);
+                    film.ImageUrl = fileName;
+                }
+            }
+            _db.Films.Add(film);
+            _db.SaveChanges();
+            return RedirectToAction("Index");
+        }
+        [HttpGet]
+        [Authorize(Roles = "Admin")]
+        public IActionResult Delete(int? id)
+        {
+            if (id == null)
+                return NotFound();
+            Film film = _db.Films.Include(f => f.Genre).FirstOrDefault(f => f.Id == id);
+            if (film == null)
+                return NotFound();
+            return View(film);
+        }
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        public IActionResult Delete(Film film)
+        {
+            if (film != null)
+            {
+                _db.Entry(film).State = EntityState.Deleted;
+                _db.SaveChanges();
+            }
+            return RedirectToAction("Index");
         }
     }
 }
