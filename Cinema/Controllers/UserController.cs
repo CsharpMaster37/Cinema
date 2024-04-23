@@ -80,25 +80,12 @@ namespace Cinema.Controllers
         [Authorize]
         public async Task<IActionResult> Profile()
         {
-            if (!User.Identity.IsAuthenticated)
-                return RedirectToAction("Login", "User");
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
                 return NotFound();
             }
-
-            var userProfile = new UserProfile
-            {
-                UserId = user.Id,
-                Username = user.UserName,
-                FirstName = user.FirstName,
-                LastName = user.LastName,
-                DateOfBirth = user.DateofBirth,
-                IsAdmin = user.IsAdmin
-            };
-
-            return View(userProfile);
+            return View(user);
         }
     }
 }

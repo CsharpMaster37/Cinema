@@ -24,13 +24,17 @@
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Cart" asp-action="Index">Корзина</a>
                             </li>
-                        }
-                        @if (User.Identity.IsAuthenticated)
-                        {
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="UsersFilms" asp-action="Index">Мои фильмы</a>
                             </li>
                         }
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Block" asp-action="Index">Блок-лист</a>
+                            </li>
+                        }
+
                     </ul>
                     <ul class="navbar-nav">
                         @if (User.Identity.IsAuthenticated)
@@ -50,7 +54,7 @@
                         else
                         {
                             <li class="nav-item">
-                                <a class="nav-link" asp-area="Identity" asp-controller="User" asp-action="Login">Логин</a>
+                                <a class="nav-link" asp-area="Identity" asp-controller="User" asp-action="Login">Вход</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" asp-area="Identity" asp-controller="User" asp-action="Register">Регистрация</a>

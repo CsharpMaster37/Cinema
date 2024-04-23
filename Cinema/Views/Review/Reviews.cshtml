@@ -1,4 +1,5 @@
 ﻿@model Cinema.Models.Review
+@using System.Web
 
 <style>
     .film-container {
@@ -122,30 +123,37 @@
     </div>
     <hr />
     <div>
-        @if (User.Identity.IsAuthenticated && ViewBag.CheckPurchased)
+        @if (User.Identity.IsAuthenticated)
         {
-            <h2>Напишите свой отзыв</h2>
-            <br />
-            <form asp-action="Add" method="post" onsubmit="return validateForm()">
-                <div class="form-group">
-                    <label asp-for="Text">Текст отзыва</label>
-                    <textarea asp-for="Text" class="form-control"></textarea>
-                    <span asp-validation-for="Text" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label>Оценка</label>
-                    <input asp-for="Rating" type="hidden" id="ratingValue" name="Rating" />
-                    <span class="rating" data-value="0"></span>
-                    <span asp-validation-for="Rating" class="text-danger"></span>
-                </div>
-                <input type="hidden" name="FilmId" value="@ViewBag.Film.Id" />
+            @if (ViewBag.Blocked)
+            {
+                <h1>Вам запрещено оставлять отзывы</h1>
+            }
+            else if (ViewBag.CheckPurchased)
+            {
+                <h2>Напишите свой отзыв</h2>
                 <br />
-                <button type="submit" class="btn btn-primary">Отправить</button>
-            </form>
-        }
-        else if (User.Identity.IsAuthenticated)
-        {
-            <h1>Вы можете оставить отзыв только после покупки фильма</h1>
+                <form asp-action="Add" method="post" onsubmit="return validateForm()">
+                    <div class="form-group">
+                        <label asp-for="Text">Текст отзыва</label>
+                        <textarea asp-for="Text" class="form-control"></textarea>
+                        <span asp-validation-for="Text" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label>Оценка</label>
+                        <input asp-for="Rating" type="hidden" id="ratingValue" name="Rating" />
+                        <span class="rating" data-value="0"></span>
+                        <span asp-validation-for="Rating" class="text-danger"></span>
+                    </div>
+                    <input type="hidden" name="FilmId" value="@ViewBag.Film.Id" />
+                    <br />
+                    <button type="submit" class="btn btn-primary">Отправить</button>
+                </form>
+            }
+            else
+            {
+                <h1>Вы можете оставить отзыв только после покупки фильма</h1>
+            }
         }
         else
         {
@@ -165,6 +173,11 @@
                         <th>Дата отзыва</th>
                         <th>Текст</th>
                         <th>Оценка</th>
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <th></th>
+                            <th></th>
+                        }
                     </tr>
                 </thead>
                 <tbody>
@@ -199,6 +212,11 @@
                                     }
                                 </span>
                             </td>
+                            @if (User.IsInRole("Admin"))
+                            {
+                                <td><a asp-action="Delete" asp-route-id="@review.Id">@HttpUtility.HtmlDecode("&#10060;")</a></td>
+                                <td><a asp-action="Block" asp-controller="Block" asp-route-id="@review.Id">@HttpUtility.HtmlDecode("&#9940;")</a></td>
+                            }
                         </tr>
                     }
                 </tbody>

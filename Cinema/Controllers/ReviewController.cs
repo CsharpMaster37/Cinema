@@ -21,7 +21,7 @@ namespace Cinema.Controllers
         }
 
         [HttpGet]
-        public IActionResult Reviews(int id)
+        public async Task<IActionResult> Reviews(int id)
         {
             var film = _db.Films.Include(f => f.Genre).FirstOrDefault(f => f.Id == id);
             var reviews = _db.Reviews.Where(r => r.FilmId == id).ToList();
@@ -34,10 +34,13 @@ namespace Cinema.Controllers
             }
             ViewBag.TotalRating = TotalRating;
             ViewBag.Film = film;
-            ViewBag.Reviews = reviews;
+            ViewBag.Reviews = reviews; 
             if (User.Identity.IsAuthenticated)
             {
-                ViewBag.CheckPurchased = checkFilmsForUser(id).GetAwaiter().GetResult();
+                User user = await _userManager.GetUserAsync(User);
+                ViewBag.Blocked = user.Blocked;
+                if(!user.Blocked)
+                    ViewBag.CheckPurchased = checkFilmsForUser(id).GetAwaiter().GetResult();
             }
             return View();
         }
@@ -52,7 +55,7 @@ namespace Cinema.Controllers
             review.DatePosted = DateTime.Now;
             review.UserId = user.Id;
             review.UserName = user.UserName;
-            var existingReview = _db.Reviews.FirstOrDefault(r => r.UserId == review.UserId);
+            var existingReview = _db.Reviews.Where(r => r.UserId == review.UserId).FirstOrDefault(r => r.FilmId == review.FilmId);
             if (existingReview != null)
             {
                 existingReview.DatePosted = review.DatePosted;
@@ -64,6 +67,25 @@ namespace Cinema.Controllers
                 _db.Reviews.Add(review);
             _db.SaveChanges();
             return RedirectToAction("Reviews", new {id = review.FilmId });
+        }
+
+        [HttpGet]
+        [Authorize(Roles = "Admin")]
+        public IActionResult Delete(int? id)
+        {
+            Review review = _db.Reviews.Include(r => r.Film).FirstOrDefault(review => review.Id == id);
+            return View(review);
+        }
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        public IActionResult Delete(Review review)
+        {
+            if (review != null)
+            {
+                _db.Entry(review).State = EntityState.Deleted;
+                _db.SaveChanges();
+            }
+            return RedirectToAction("Reviews", new {id = review.FilmId});
         }
 
 

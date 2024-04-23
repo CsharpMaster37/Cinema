@@ -8,5 +8,6 @@ namespace Cinema.Models
         public string? LastName { get; set; }
         public DateTime? DateofBirth { get; set; }
         public bool IsAdmin { get; set; }
+        public bool Blocked { get; set; }
     }
 }

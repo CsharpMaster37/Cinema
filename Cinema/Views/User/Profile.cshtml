@@ -1,4 +1,4 @@
-﻿@model Cinema.Models.UserProfile
+﻿@model Cinema.Models.User
 
 <style>
     h2 {
@@ -43,11 +43,11 @@
     <dl>
         <div class="element">
             <dt>ID:</dt>
-            <dd>@Model.UserId</dd>
+            <dd>@Model.Id</dd>
         </div>
         <div class="element">
             <dt>Имя пользователя:</dt>
-            <dd>@Model.Username</dd>
+            <dd>@Model.UserName</dd>
         </div>
         <div class="element">
             <dt>Имя:</dt>
@@ -59,11 +59,15 @@
         </div>
         <div class="element">
             <dt>Дата рождения:</dt>
-            <dd>@(Model.DateOfBirth.HasValue ? Model.DateOfBirth.Value.ToShortDateString() : "N/A")</dd>
+            <dd>@(Model.DateofBirth.HasValue ? Model.DateofBirth.Value.ToShortDateString() : "N/A")</dd>
         </div>
         <div class="element">
             <dt>Is Admin:</dt>
             <dd>@(Model.IsAdmin ? "Yes" : "No")</dd>
+        </div>
+        <div class="element">
+            <dt>Blocked:</dt>
+            <dd>@(Model.Blocked ? "Yes" : "No")</dd>
         </div>
     </dl>
 </div>
