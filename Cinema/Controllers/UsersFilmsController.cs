@@ -38,9 +38,12 @@ namespace Cinema.Controllers
             List<Order> orders = _db.Orders.Where(o => o.Status == "Выполнен" && o.UserId == user.Id).ToList();
             List<Film> films = new List<Film>();
             ViewBag.SearchString = searchString;
+            List<OrderItem> items;
             foreach (var order in orders)
-            {
-                var items = _db.Items.Include(i => i.Film).Include(i => i.Film.Genre).Where(i => i.OrderId == order.Id).Where(i=>i.Film.Name.Contains(searchString)).ToList();
+            {     
+                items = searchString is not null && searchString.Length > 0 ?
+                    _db.Items.Include(i => i.Film).Include(i => i.Film.Genre).Where(i => i.OrderId == order.Id).Where(i => i.Film.Name.Contains(searchString)).ToList():
+                    _db.Items.Include(i => i.Film).Include(i => i.Film.Genre).Where(i => i.OrderId == order.Id).ToList();
                 foreach (var item in items)
                 {
                     films.Add(item.Film);

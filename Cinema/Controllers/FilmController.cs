@@ -152,8 +152,9 @@ namespace Cinema.Controllers
         {
             ViewBag.UserManager = _userManager;
             ViewBag.SearchString = searchString;
-            var films = _db.Films.Include(f => f.Genre).Where(f => f.Name.Contains(searchString)).ToList();
-
+            List<Film> films = searchString is not null && searchString.Length > 0 ?
+                _db.Films.Include(f => f.Genre).Where(f => f.Name.Contains(searchString)).ToList() :
+                _db.Films.Include(f => f.Genre).ToList();
             List<int> cart = new List<int>();
             List<int> PurchasedFilms = new List<int>();
 
