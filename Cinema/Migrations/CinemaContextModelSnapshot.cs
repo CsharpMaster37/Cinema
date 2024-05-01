@@ -41,7 +41,7 @@ namespace Cinema.Migrations
 
                     b.HasIndex("FilmId");
 
-                    b.ToTable("Cart");
+                    b.ToTable("Cart", (string)null);
                 });
 
             modelBuilder.Entity("Cinema.Models.Film", b =>
@@ -78,7 +78,7 @@ namespace Cinema.Migrations
 
                     b.HasIndex("GenreId");
 
-                    b.ToTable("Film");
+                    b.ToTable("Film", (string)null);
                 });
 
             modelBuilder.Entity("Cinema.Models.Genre", b =>
@@ -96,7 +96,7 @@ namespace Cinema.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Genres");
+                    b.ToTable("Genres", (string)null);
                 });
 
             modelBuilder.Entity("Cinema.Models.Order", b =>
@@ -123,7 +123,7 @@ namespace Cinema.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Order");
+                    b.ToTable("Order", (string)null);
                 });
 
             modelBuilder.Entity("Cinema.Models.OrderItem", b =>
@@ -146,7 +146,7 @@ namespace Cinema.Migrations
 
                     b.HasIndex("OrderId");
 
-                    b.ToTable("Items");
+                    b.ToTable("Items", (string)null);
                 });
 
             modelBuilder.Entity("Cinema.Models.Review", b =>
@@ -183,7 +183,7 @@ namespace Cinema.Migrations
 
                     b.HasIndex("FilmId");
 
-                    b.ToTable("Reviews");
+                    b.ToTable("Reviews", (string)null);
                 });
 
             modelBuilder.Entity("Cinema.Models.ReviewBlockList", b =>
@@ -207,7 +207,7 @@ namespace Cinema.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("BlockListReviews");
+                    b.ToTable("BlockListReviews", (string)null);
                 });
 
             modelBuilder.Entity("Cinema.Models.User", b =>

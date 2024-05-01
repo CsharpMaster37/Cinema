@@ -1,6 +1,10 @@
 ﻿@model Cinema.Models.Review
 @using System.Web
 
+@{
+    ViewData["Title"] = "Reviews";
+}
+
 <style>
     .film-container {
         display: flex;
@@ -133,21 +137,22 @@
             {
                 <h2>Напишите свой отзыв</h2>
                 <br />
-                <form asp-action="Add" method="post" onsubmit="return validateForm()">
+                <form asp-action="Add">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input asp-for="FilmId" type="hidden" value="@ViewBag.Film.Id" />
                     <div class="form-group">
-                        <label asp-for="Text">Текст отзыва</label>
-                        <textarea asp-for="Text" class="form-control"></textarea>
+                        <label asp-for="Text" class="control-label"></label>
+                        <input asp-for="Text" id="textReview" class="form-control" />
                         <span asp-validation-for="Text" class="text-danger"></span>
                     </div>
                     <div class="form-group">
-                        <label>Оценка</label>
-                        <input asp-for="Rating" type="hidden" id="ratingValue" name="Rating" />
-                        <span class="rating" data-value="0"></span>
+                        <label asp-for="Rating" class="control-label"></label>
+                        <input asp-for="Rating" type="hidden" id="ratingValue"/>
+                        <span class="rating" data-value="5"></span>
                         <span asp-validation-for="Rating" class="text-danger"></span>
                     </div>
-                    <input type="hidden" name="FilmId" value="@ViewBag.Film.Id" />
                     <br />
-                    <button type="submit" class="btn btn-primary">Отправить</button>
+                    <input type="submit" value="Отправить" class="btn btn-primary" />
                 </form>
             }
             else
@@ -232,36 +237,45 @@
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.0/font/bootstrap-icons.css" rel="stylesheet">
 
-
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         var ratingSpan = document.querySelector(".rating");
         var ratingValueInput = document.getElementById("ratingValue");
-
+        var reviewTextInput = document.getElementById("textReview");
+        var submitButton = document.querySelector("input[type='submit']");
         ratingSpan.addEventListener("click", function () {
             var value = this.getAttribute("data-value");
             ratingValueInput.value = value;
         });
-    });
 
+        checkSubmitButtonState();
+        function checkSubmitButtonState() {
+            var text = reviewTextInput.value.trim();
+            if (text === "") {
+                submitButton.disabled = true;
+            }
+            else {
+                submitButton.disabled = false;
+            }
+        }
+        reviewTextInput.addEventListener("input", checkSubmitButtonState);
+    });
     class Rating {
         constructor(dom) {
             dom.innerHTML = '<svg width="110" height="20"></svg>';
             this.svg = dom.querySelector('svg');
             for (var i = 0; i < 5; i++)
                 this.svg.innerHTML += `<polygon data-value="${i + 1}"
-               transform="translate(${i * 22},0)"
-               points="10,1 4,19.8 19,7.8 1,7.8 16,19.8">`;
+                   transform="translate(${i * 22},0)"
+                   points="10,1 4,19.8 19,7.8 1,7.8 16,19.8">`;
             this.svg.onclick = e => this.change(e);
             this.render();
         }
-
         change(e) {
             let value = e.target.dataset.value;
             value && (this.svg.parentNode.dataset.value = value);
             this.render();
         }
-
         render() {
             this.svg.querySelectorAll('polygon').forEach(star => {
                 let on = +this.svg.parentNode.dataset.value >= +star.dataset.value;
@@ -269,7 +283,6 @@
             });
         }
     }
-
     document.querySelectorAll('.rating').forEach(dom => new Rating(dom));
 </script>
 
