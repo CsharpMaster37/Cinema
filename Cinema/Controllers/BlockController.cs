@@ -10,7 +10,7 @@ namespace Cinema.Controllers
     public class BlockController : Controller
     {
         CinemaContext _db;
-        public BlockController(CinemaContext context, UserManager<User> userManager)
+        public BlockController(CinemaContext context)
         {
             _db = context;
         }
