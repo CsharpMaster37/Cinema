@@ -148,16 +148,20 @@ namespace Cinema.Controllers
             _db.SaveChanges();
             return RedirectToAction("Index");
         }
-        public async Task<IActionResult> Search(string searchString)
+        public async Task<IActionResult> Search(string searchString, int? year)
         {
             ViewBag.UserManager = _userManager;
             ViewBag.SearchString = searchString;
+            ViewBag.SelectedYear = year;
             List<Film> films = searchString is not null && searchString.Length > 0 ?
                 _db.Films.Include(f => f.Genre).Where(f => f.Name.Contains(searchString)).ToList() :
                 _db.Films.Include(f => f.Genre).ToList();
+            if (year.HasValue)
+            {
+                films = films.Where(f => f.Year == year).ToList();
+            }
             List<int> cart = new List<int>();
             List<int> PurchasedFilms = new List<int>();
-
             if (User.Identity.IsAuthenticated)
             {
                 var user = await _userManager.GetUserAsync(User);

@@ -12,7 +12,7 @@ namespace Cinema.Models
         public string? FirstName { get; set; }
         [Display(Name = "Фамилия")]
         public string? LastName { get; set; }
-        [Range(1900, 2023, ErrorMessage = "Недопустимый год")]
+        [Range(typeof(DateTime), "1/1/1900", "1/1/2023", ErrorMessage = "Недопустимая дата")]
         [Display(Name = "Дата рождения")]
         public DateTime? DateofBirth { get; set; }
         [Required]
