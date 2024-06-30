@@ -85,6 +85,7 @@ namespace Cinema.Controllers
         }
         public async Task<IActionResult> Index()
         {
+            ViewBag.SelectedYear = null;
             ViewBag.UserManager = _userManager;
             var films = await _db.Films.Include(f => f.Genre).ToListAsync();
             List<int> cart = new List<int>();

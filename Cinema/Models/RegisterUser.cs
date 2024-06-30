@@ -22,7 +22,7 @@ namespace Cinema.Models
 
         [DataType(DataType.Password)]
         [Display(Name = "Повторите пароль")]
-        [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+        [Compare("Password", ErrorMessage = "Пароли не совпадают!")]
         public string ConfirmPassword { get; set; }
     }
 }
